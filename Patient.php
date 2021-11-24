@@ -1,20 +1,35 @@
 <?php
 class Patient implements JsonSerializable{
+    static $idCount = 0;
+
+    private $id;
     private $name;
     private $age;
     private $gender;
     private $address;
+    private $consultation;
 
     public function __construct($name, $age, $gender, $address) {
+        $this->id = Patient::$idCount;
+        Patient::$idCount++;
+
         $this->name = $name;
         $this->age = $age;
         $this->gender = $gender;
-        $this->address = $address;    
+        $this->address = $address;
+        $this->consultation = [
+            "time" => "",
+            "done" => false
+        ];
     }
 
     /**
      * Getters
      */
+    public function getId() {
+        return $this->id;
+    }
+    
     public function getName() {
         return $this->name;
     }
@@ -29,6 +44,10 @@ class Patient implements JsonSerializable{
 
     public function getAddress() {
         return $this->address;
+    }
+
+    public function getConsultationDetails(String $key) {
+        return $this->consultation[$key];
     }
 
     public function jsonSerialize() {
@@ -52,5 +71,9 @@ class Patient implements JsonSerializable{
 
     public function setAddress(String $address) {
         $this->address = $address;
+    }
+
+    public function setConsultationDetails($key, $value) {
+        $this->consultation[$key] = $value;
     }
 }
