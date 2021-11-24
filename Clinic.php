@@ -27,11 +27,40 @@ class Clinic implements JsonSerializable {
         return get_object_vars($this);
     }
 
+    public function __wakeup(){
+        foreach (get_object_vars($this) as $k => $v) {
+            $this->{$k} = $v;
+        }
+    }
+
     public function addPatient(Patient $patient) {
         array_push($this->patients, $patient);
     }
 
+    public function getPatient($id) {
+        $i = 0;
+        foreach ($this->patients as $patient) {
+            if ($patient->getId() == $id) {
+                return $this->patients[$i];
+            }
+
+            $i++;
+        }
+        
+        return false;
+    }
+
     public function removePatient(int $id) {
-        array_splice($this->patients, $id, 1);
+        $i = 0;
+        foreach ($this->patients as $patient) {
+            if ($patient->getId() == $id) {
+                array_splice($this->patients, $i, 1);
+                return true;
+            }
+
+            $i++;
+        }
+
+        return false;
     }
 }

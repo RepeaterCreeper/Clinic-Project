@@ -1,6 +1,6 @@
 <?php
 class Patient implements JsonSerializable{
-    static $idCount = 0;
+    public static $idCount = 0;
 
     private $id;
     private $name;
@@ -10,8 +10,7 @@ class Patient implements JsonSerializable{
     private $consultation;
 
     public function __construct($name, $age, $gender, $address) {
-        $this->id = Patient::$idCount;
-        Patient::$idCount++;
+        $this->id = spl_object_id($this);
 
         $this->name = $name;
         $this->age = $age;
@@ -29,7 +28,7 @@ class Patient implements JsonSerializable{
     public function getId() {
         return $this->id;
     }
-    
+
     public function getName() {
         return $this->name;
     }
@@ -52,6 +51,12 @@ class Patient implements JsonSerializable{
 
     public function jsonSerialize() {
         return get_object_vars($this);
+    }
+
+    public function __wakeup(){
+        foreach (get_object_vars($this) as $k => $v) {
+            $this->{$k} = $v;
+        }
     }
 
     /**

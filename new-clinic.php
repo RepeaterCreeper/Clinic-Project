@@ -2,7 +2,8 @@
 require_once "init.php";
 
 if (isset($_POST["clinicName"]) && !empty($_POST["clinicName"])) {
-    $DATA->Clinics[$_POST["clinicName"]] = [];
+    $DATA["Clinics"][$_POST["clinicName"]] = new Clinic($_POST["clinicName"]);
+    
     Utility::saveChanges();
     header("location: /");
 }

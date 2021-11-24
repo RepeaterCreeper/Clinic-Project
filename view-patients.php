@@ -7,11 +7,11 @@ if (!isset($_GET["clinic"])) {
 }
 
 $clinicName = $_GET["clinic"];
-$patients = $DATA->Clinics->{$clinicName};
+$patients = $DATA["Clinics"][$clinicName]->getAllPatients();
 
 if (isset($_GET["delete"])) {
     $id = $_GET["delete"];
-    array_splice($DATA->Clinics->$clinicName, $id, 1);
+    $DATA["Clinics"][$clinicName]->removePatient($id);
     Utility::saveChanges();
 
     header("location: view-patients.php?clinic=$clinicName");
@@ -20,7 +20,9 @@ if (isset($_GET["delete"])) {
 
 if (isset($_GET["complete"])) {
     $id = $_GET["complete"];
-    $DATA->Clinics->$clinicName[$id]->consultation->done = true;
+    $patient = $DATA["Clinics"][$clinicName]->getPatient($id);
+    $patient->setConsultationDetails("done", true);
+
     Utility::saveChanges();
 
     header("location: view-patients.php?clinic=$clinicName");
@@ -90,31 +92,31 @@ if (isset($_GET["complete"])) {
                                                 <div class="flex items-center">
                                                     <div class="ml-4">
                                                         <div class="text-sm font-medium text-gray-900">
-                                                            <?= $patient->name; ?>
+                                                            <?= $patient->getName(); ?>
                                                         </div>
                                                         <div class="text-sm text-gray-500">
-                                                            <?= $patient->address; ?>
+                                                            <?= $patient->getAddress(); ?>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900"><?= $patient->age ?></div>
+                                                <div class="text-sm text-gray-900"><?= $patient->getAge() ?></div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 font-bold">
-                                                <?= strtoupper($patient->gender); ?>
+                                                <?= strtoupper($patient->getGender()); ?>
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                <p><b>Time:</b> <?= $patient->consultation->time ?></p>
-                                                <p><b>Has been consulted: </b> <?= $patient->consultation->done ? "YES" : "NO"; ?></p>
+                                                <p><b>Time:</b> <?= $patient->getConsultationDetails("time") ?></p>
+                                                <p><b>Has been consulted: </b> <?= $patient->getConsultationDetails("done") ? "YES" : "NO"; ?></p>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-left text-sm">
-                                                <?php if (!$patient->consultation->done) { ?>
-                                                    <a href="?clinic=<?= $_GET["clinic"];?>&complete=<?= $patient->id ?>" class="text-blue-500 border py-2 px-4 border-gray-200 rounded-md font-medium hover:bg-blue-600 hover:text-white transition">Mark as completed</a>
+                                                <?php if (!$patient->getConsultationDetails("done")) { ?>
+                                                    <a href="?clinic=<?= $_GET["clinic"];?>&complete=<?= $patient->getId() ?>" class="text-blue-500 border py-2 px-4 border-gray-200 rounded-md font-medium hover:bg-blue-600 hover:text-white transition">Mark as completed</a>
                                                 <?php } ?>
-                                                <a href="?clinic=<?= $_GET["clinic"];?>&delete=<?= $patient->id ?>" class="text-red-500 border py-2 px-4 border-red-200 rounded-md font-medium hover:bg-red-600 hover:text-white transition">Delete Patient</a>
+                                                <a href="?clinic=<?= $_GET["clinic"];?>&delete=<?= $patient->getId() ?>" class="text-red-500 border py-2 px-4 border-red-200 rounded-md font-medium hover:bg-red-600 hover:text-white transition">Delete Patient</a>
                                             </td>
                                         </tr>
                                         <?php } ?>

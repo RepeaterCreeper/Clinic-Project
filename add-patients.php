@@ -1,7 +1,7 @@
 <?php
 require_once "init.php";
 
-if (!isset($_GET["clinic"]) || empty($_GET["clinic"]) || !property_exists($DATA->Clinics, $_GET["clinic"])) {
+if (!isset($_GET["clinic"]) || empty($_GET["clinic"]) || !key_exists($_GET["clinic"], $DATA["Clinics"])) {
     header("location: /");
 }
 
@@ -16,7 +16,7 @@ if (isset($_POST["patientName"])) {
         $patient = new Patient($_POST["patientName"], $_POST["patientAge"], $_POST["patientGender"], $_POST["patientAddress"]);
         $patient->setConsultationDetails("time", $_POST["consultationTime"]);
 
-        array_push($DATA->Clinics->{$_GET["clinic"]}, $patient);
+        $DATA["Clinics"][$_GET["clinic"]]->addPatient($patient);
         Utility::saveChanges();
 
         header("location: /view-patients.php?clinic={$_GET['clinic']}");
