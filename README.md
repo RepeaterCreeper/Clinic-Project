@@ -21,3 +21,5 @@ List of tools used for this project. These include framework, library, language.
 | *Language* | PHP | For processing the data that is displayed on the front-end. Full CRUD functionality included.
 | *Language* | HTML | Displaying information to the front-end.
 | *Framework* | Tailwind | Designing the front-end.
+
+first commit 
