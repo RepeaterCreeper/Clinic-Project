@@ -1,6 +1,9 @@
 # Clinic System
 This was created as part of OOPL Class for midterm examination.
 
+![image](https://user-images.githubusercontent.com/2164489/143481218-2c9c56b1-62a0-476d-8059-0ed11ee1974e.png)
+(Live Demo: https://replit.com/@repeatercreeper/Midterm-OOPLP)
+
 ## Contributors
 |Role   |Name   | Section | Assigned Tasks |
 |---|---|---|---|
@@ -21,5 +24,3 @@ List of tools used for this project. These include framework, library, language.
 | *Language* | PHP | For processing the data that is displayed on the front-end. Full CRUD functionality included.
 | *Language* | HTML | Displaying information to the front-end.
 | *Framework* | Tailwind | Designing the front-end.
-
-first commit 
