@@ -29,22 +29,27 @@ class Patient implements JsonSerializable{
         return $this->id;
     }
 
+    // Get Name
     public function getName() {
         return $this->name;
     }
 
+    // Get Age
     public function getAge() {
         return $this->age;
     }
 
+    // Get Gender
     public function getGender() {
         return $this->gender;
     }
 
+    // Get Address
     public function getAddress() {
         return $this->address;
     }
 
+    // Get consultation details
     public function getConsultationDetails(String $key) {
         return $this->consultation[$key];
     }

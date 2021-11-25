@@ -19,6 +19,11 @@ class Clinic implements JsonSerializable {
         return $this->name;
     }
 
+    /**
+     * Returns the name of all the patients in the Clinic instance.
+     * 
+     * @return Patients[] array
+     */
     public function getAllPatients() {
         return $this->patients;
     }
@@ -33,10 +38,16 @@ class Clinic implements JsonSerializable {
         }
     }
 
+    /**
+     * Add patients for this clinic instance.
+     */
     public function addPatient(Patient $patient) {
         array_push($this->patients, $patient);
     }
 
+    /**
+     * Get patient with ID.
+     */
     public function getPatient($id) {
         $i = 0;
         foreach ($this->patients as $patient) {
@@ -50,6 +61,9 @@ class Clinic implements JsonSerializable {
         return false;
     }
 
+    /**
+     * Remove patient targeted ID.
+     */
     public function removePatient(int $id) {
         $i = 0;
         foreach ($this->patients as $patient) {
