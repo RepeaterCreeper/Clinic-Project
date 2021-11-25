@@ -65,7 +65,7 @@ if (isset($_POST["patientName"])) {
                     <label for="patientGender" class="block font-medium mb-2">Gender</label>
                     <select name="patientGender" class="block border rounded-md border-gray-500 py-2 px-4">
                         <option value="male">Male</option>
-                        <option value="male">Female</option>
+                        <option value="female">Female</option>
                     </select>
                 </div>
                 <div class="col-span-2 m-2">
