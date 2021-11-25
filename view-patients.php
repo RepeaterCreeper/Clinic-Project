@@ -27,6 +27,21 @@ if (isset($_GET["complete"])) {
 
     header("location: view-patients.php?clinic=$clinicName");
 }
+
+if (isset($_GET["sort"]) && isset($_GET["order"])) {
+    $isAsc = $_GET["order"] == "asc" ? true : false;
+    switch ($_GET["sort"]) {
+        case "name":
+            $patients = Utility::sortByName($patients, $isAsc);
+            break;
+        case "consultation":
+            $patients = Utility::sortByConsultation($patients, $isAsc);
+            break;
+        case "time":
+            $patients = Utility::sortByTime($patients, $isAsc);
+            break;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +83,30 @@ if (isset($_GET["complete"])) {
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Name / Address
+                                            <?php
+                                                $opposite = "desc";
+                                                $currentOrder = "asc";
+                                                if (isset($_GET["order"])) {
+                                                    $currentOrder = $_GET["order"];
+                                                    if ($_GET["order"] == "desc") {
+                                                        $opposite = "asc";
+                                                    } else {
+                                                        $opposite = "desc";
+                                                    }
+                                                }
+                                            ?>
+                                            <a class="flex items-center hover:text-blue-500" href="?clinic=<?= $clinicName; ?>&sort=name&order=<?= $opposite; ?>">
+                                                Name / Address
+                                                <?php if ($currentOrder == "asc") { ?>
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7l4-4m0 0l4 4m-4-4v18" />
+                                                </svg>
+                                                <?php } else { ?>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                                    </svg>
+                                                <?php } ?>
+                                            </a>
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Age
@@ -77,7 +115,32 @@ if (isset($_GET["complete"])) {
                                             Gender
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Consultation Details
+                                            <a class="flex items-center hover:text-blue-500" href="?clinic=<?= $clinicName; ?>&sort=time&order=<?= $opposite; ?>">
+                                                Time
+                                                <?php if ($currentOrder == "asc") { ?>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7l4-4m0 0l4 4m-4-4v18" />
+                                                    </svg>
+                                                <?php } else { ?>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                                    </svg>
+                                                <?php } ?>
+                                            </a>
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            <a class="flex items-center hover:text-blue-500" href="?clinic=<?= $clinicName; ?>&sort=consultation&order=<?= $opposite; ?>">
+                                                Consultation Status
+                                                <?php if ($currentOrder == "asc") { ?>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7l4-4m0 0l4 4m-4-4v18" />
+                                                    </svg>
+                                                <?php } else { ?>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                                    </svg>
+                                                <?php } ?>
+                                            </a>
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Action
@@ -109,8 +172,10 @@ if (isset($_GET["complete"])) {
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                <p><b>Time:</b> <?= $patient->getConsultationDetails("time") ?></p>
-                                                <p><b>Has been consulted: </b> <?= $patient->getConsultationDetails("done") ? "YES" : "NO"; ?></p>
+                                                <p><?= $patient->getConsultationDetails("time") ?></p>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <p><?= !$patient->getConsultationDetails("done") ? "Not Completed" : "Completed"; ?></p>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-left text-sm">
                                                 <?php if (!$patient->getConsultationDetails("done")) { ?>
@@ -125,8 +190,6 @@ if (isset($_GET["complete"])) {
                                             <td class="px-6 py-4">No patients available for this clinic.</td>
                                         </tr>
                                     <?php } ?>
-
-                                    <!-- More people... -->
                                 </tbody>
                             </table>
                         </div>
