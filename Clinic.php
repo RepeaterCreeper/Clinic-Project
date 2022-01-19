@@ -5,6 +5,7 @@
 class Clinic implements JsonSerializable {
     private $name = "";
     private $patients = [];
+    private $appointments = [];
 
     public function __construct(String $name) {
         $this->name = $name;
@@ -28,6 +29,10 @@ class Clinic implements JsonSerializable {
         return $this->patients;
     }
 
+    public function getAllAppointments() {
+        return $this->appointments;
+    }
+
     public function jsonSerialize() {
         return get_object_vars($this);
     }
@@ -43,6 +48,16 @@ class Clinic implements JsonSerializable {
      */
     public function addPatient(Patient $patient) {
         array_push($this->patients, $patient);
+    }
+
+    public function addAppointment($id, $nurse, $datetime) {
+        // Check if it exists
+        if (!isset($this->appointments[$datetime])) {
+            $this->appointments[$datetime] = [$this->getPatient($id), $nurse];
+            return true;
+        }
+        
+        return false;
     }
 
     /**
