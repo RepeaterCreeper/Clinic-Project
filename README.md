@@ -1,5 +1,5 @@
 # Clinic System
-This was created as part of OOPL Class for midterm examination.
+This was created as part of OOPL Class for midterm and final examinations.
 
 ![image](https://user-images.githubusercontent.com/2164489/143481218-2c9c56b1-62a0-476d-8059-0ed11ee1974e.png)
 (Live Demo: https://replit.com/@repeatercreeper/Midterm-OOPL)
